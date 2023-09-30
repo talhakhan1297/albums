@@ -10,7 +10,6 @@ dependencies:
   cache_client:
     path: ../cache_client
   equatable: ^2.0.5
-  uuid: ^4.1.0
 
 dev_dependencies:
   mocktail: ^1.0.0
