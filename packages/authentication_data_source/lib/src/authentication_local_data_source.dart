@@ -10,11 +10,8 @@ class AuthenticationLocalDataSource implements AuthenticationDataSource {
 
   final CacheClient _cacheClient;
 
-  /// Onboarded users cache key.
-  final _onboardedUsersCacheKey = '__onboarded_users_cache_key__';
-
-  /// Current user cache key.
-  final _currentUserCacheKey = '__current_user_cache_key__';
+  static const _onboardedUsersCacheKey = '__onboarded_users_cache_key__';
+  static const _currentUserCacheKey = '__current_user_cache_key__';
 
   @override
   bool get isOnboarded => _getOnboardedUsers().isNotEmpty;

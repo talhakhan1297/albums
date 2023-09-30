@@ -1,9 +1,11 @@
 part of 'cache_client.dart';
 
 // ignore_for_file: strict_raw_type, inference_failure_on_function_invocation
+/// {@template hive_cache_client}
 /// A simple cache client that uses hive.
+/// {@endtemplate}
 class HiveCacheClient implements CacheClient {
-  ///
+  /// {@macro hive_cache_client}
   HiveCacheClient({HiveInterface? hive}) : _cache = (hive ?? Hive).box('cache');
 
   final Box _cache;

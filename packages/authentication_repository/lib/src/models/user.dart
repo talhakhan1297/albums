@@ -1,11 +1,11 @@
 import 'package:authentication_data_source/authentication_data_source.dart';
 import 'package:equatable/equatable.dart';
 
-/// {@template user_entity}
+/// {@template user}
 /// Model class for a user.
 /// {@endtemplate}
 class User extends Equatable {
-  /// {@macro user_entity}
+  /// {@macro user}
   const User({this.username});
 
   /// Parses from [UserEntity] to [User].

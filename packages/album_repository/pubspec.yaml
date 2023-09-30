@@ -1,0 +1,17 @@
+name: album_repository
+description: A repository for managing Albums.
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  album_data_source:
+    path: ../album_data_source
+  equatable: ^2.0.5
+
+dev_dependencies:
+  mocktail: ^1.0.0
+  test: ^1.19.2
+  very_good_analysis: ^5.1.0

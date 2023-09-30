@@ -7,7 +7,7 @@ class UserEntity extends Equatable {
   /// {@macro user_entity}
   const UserEntity({this.username});
 
-  /// Parses from JSON to [UserEntity].
+  /// Parses from [json] to [UserEntity].
   factory UserEntity.fromJson(Map<String, dynamic> json) {
     return UserEntity(username: json['username'] as String?);
   }
