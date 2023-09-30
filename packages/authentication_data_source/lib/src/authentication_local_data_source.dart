@@ -31,11 +31,7 @@ class AuthenticationLocalDataSource implements AuthenticationDataSource {
       throw Exception('User already exists.');
     }
 
-    usersList.add({
-      'id': const Uuid().v7(),
-      'username': username,
-      'password': password,
-    });
+    usersList.add({'username': username, 'password': password});
 
     _cacheClient.write(key: usersCacheKey, value: usersList);
   }
