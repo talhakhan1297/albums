@@ -1,5 +1,5 @@
 name: authentication_data_source
-description: A data source for Authentication
+description: A data source for Authentication.
 version: 0.1.0+1
 publish_to: none
 

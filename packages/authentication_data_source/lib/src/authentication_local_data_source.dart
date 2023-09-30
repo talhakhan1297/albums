@@ -10,8 +10,14 @@ class AuthenticationLocalDataSource implements AuthenticationDataSource {
 
   final CacheClient _cacheClient;
 
-  /// Users cache key.
-  static const usersCacheKey = '__onboarded_users_cache_key__';
+  /// Onboarded users cache key.
+  final _onboardedUsersCacheKey = '__onboarded_users_cache_key__';
+
+  /// Current user cache key.
+  final _currentUserCacheKey = '__current_user_cache_key__';
+
+  @override
+  bool get isOnboarded => _getOnboardedUsers().isNotEmpty;
 
   /// Registers a user by storing it in local storage.
   @override
@@ -20,10 +26,7 @@ class AuthenticationLocalDataSource implements AuthenticationDataSource {
       throw Exception('Invalid username or password');
     }
 
-    final usersList = _cacheClient.read<List<Map<String, dynamic>>>(
-          key: usersCacheKey,
-        ) ??
-        [];
+    final usersList = _getOnboardedUsers();
 
     final users = usersList.map(UserEntity.fromJson).toList();
 
@@ -33,34 +36,61 @@ class AuthenticationLocalDataSource implements AuthenticationDataSource {
 
     usersList.add({'username': username, 'password': password});
 
-    _cacheClient.write(key: usersCacheKey, value: usersList);
+    _cacheClient.write(key: _onboardedUsersCacheKey, value: usersList);
   }
 
   /// Logs in a user by checking if user exists in the local storage.
   @override
-  Future<UserEntity> login({
+  UserEntity login({
     required String username,
     required String password,
-  }) async {
+  }) {
     if (username.isEmpty || password.isEmpty) {
       throw Exception('Invalid username or password');
     }
 
     final usersList = _cacheClient.read<List<Map<String, dynamic>>>(
-          key: usersCacheKey,
+          key: _onboardedUsersCacheKey,
         ) ??
         [];
 
-    final users = usersList.map(UserEntity.fromJson).toList();
-
-    final filteredUsers = users
-        .where((user) => user.username == username && user.password == password)
+    final filteredUsers = usersList
+        .where(
+          (user) =>
+              user['username'] == username && user['password'] == password,
+        )
         .toList();
 
     if (filteredUsers.isEmpty) {
       throw Exception('Invalid username or password');
     }
 
-    return filteredUsers.first;
+    return UserEntity.fromJson(filteredUsers.first);
+  }
+
+  @override
+  UserEntity? getCurrentUser() {
+    final user = _cacheClient.read<Map<String, dynamic>>(
+      key: _currentUserCacheKey,
+    );
+
+    return user == null ? null : UserEntity.fromJson(user);
+  }
+
+  @override
+  void setCurrentUser(UserEntity user) {
+    _cacheClient.write(key: _currentUserCacheKey, value: user.toJson);
+  }
+
+  @override
+  void dispose() {
+    _cacheClient.close();
+  }
+
+  List<Map<String, dynamic>> _getOnboardedUsers() {
+    return _cacheClient.read<List<Map<String, dynamic>>>(
+          key: _onboardedUsersCacheKey,
+        ) ??
+        [];
   }
 }

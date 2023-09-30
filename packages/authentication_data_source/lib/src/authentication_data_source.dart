@@ -12,12 +12,24 @@ abstract class AuthenticationDataSource {
   /// {@macro authentication_data_source}
   const AuthenticationDataSource();
 
+  /// Convenience getter to determine whether the current user is onboarded.
+  bool get isOnboarded;
+
   /// Registers a user.
   void onboard({required String username, required String password});
 
   /// Logs in a user.
-  Future<UserEntity> login({
+  UserEntity login({
     required String username,
     required String password,
   });
+
+  /// Returns the current user.
+  UserEntity? getCurrentUser();
+
+  /// Updates the current user.
+  void setCurrentUser(UserEntity user);
+
+  /// Dispose the AuthenticationDataSource and its dependencies.
+  void dispose();
 }
