@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:authentication_data_source/src/entities/entities.dart';
 import 'package:cache_client/cache_client.dart';
 

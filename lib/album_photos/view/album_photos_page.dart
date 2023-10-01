@@ -8,18 +8,20 @@ class AlbumPhotosPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text('Album Photos'),
-          TextButton(
-            onPressed: () {
-              context.router.pop();
-            },
-            child: const Text('Go Back'),
-          ),
-        ],
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Album Photos'),
+            TextButton(
+              onPressed: () {
+                context.router.pop();
+              },
+              child: const Text('Go Back'),
+            ),
+          ],
+        ),
       ),
     );
   }

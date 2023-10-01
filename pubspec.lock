@@ -166,7 +166,7 @@ packages:
     source: hosted
     version: "8.6.3"
   cache_client:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: "packages/cache_client"
       relative: true

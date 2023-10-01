@@ -9,30 +9,36 @@ class AlbumsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text('Albums'),
-          TextButton(
-            onPressed: () {
-              context.router.push(AlbumPhotosRoute(id: 1));
-            },
-            child: const Text('Go to Album Photos'),
-          ),
-          TextButton(
-            onPressed: () {
-              context.read<AppCubit>().onLogoutRequested();
-            },
-            child: const Text('logout'),
-          ),
-          TextButton(
-            onPressed: () {
-              context.router.pop();
-            },
-            child: const Text('Go Back'),
-          ),
-        ],
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Albums'),
+            TextButton(
+              onPressed: () {
+                context.router.push(AlbumPhotosRoute(id: 1));
+              },
+              child: const Text('Go to Album Photos'),
+            ),
+            TextButton(
+              onPressed: () {
+                context.read<AppCubit>().onLogoutRequested();
+                context.router.pushAndPopUntil(
+                  const LoginRoute(),
+                  predicate: (_) => false,
+                );
+              },
+              child: const Text('logout'),
+            ),
+            TextButton(
+              onPressed: () {
+                context.router.pop();
+              },
+              child: const Text('Go Back'),
+            ),
+          ],
+        ),
       ),
     );
   }

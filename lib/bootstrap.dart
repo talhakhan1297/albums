@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:album_repository/album_repository.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:cache_client/cache_client.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 
@@ -24,11 +25,15 @@ class AppBlocObserver extends BlocObserver {
 }
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
   Bloc.observer = const AppBlocObserver();
+
+  await HiveCacheClient.initializeCache();
 
   GetIt.instance
     ..registerSingleton<AuthenticationRepository>(

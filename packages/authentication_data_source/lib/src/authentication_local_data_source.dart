@@ -25,15 +25,20 @@ class AuthenticationLocalDataSource implements AuthenticationDataSource {
 
     final usersList = _getOnboardedUsers();
 
-    final users = usersList.map(UserEntity.fromJson).toList();
+    final users = usersList
+        .map((e) => UserEntity.fromJson(jsonDecode(e) as Map<String, dynamic>))
+        .toList();
 
     if (users.any((user) => user.username == username)) {
       throw Exception('User already exists.');
     }
 
-    usersList.add({'username': username, 'password': password});
+    usersList.add(jsonEncode({'username': username, 'password': password}));
 
-    _cacheClient.write(key: _onboardedUsersCacheKey, value: usersList);
+    _cacheClient.write<List<String>>(
+      key: _onboardedUsersCacheKey,
+      value: usersList,
+    );
   }
 
   /// Logs in a user by checking if user exists in the local storage.
@@ -46,37 +51,41 @@ class AuthenticationLocalDataSource implements AuthenticationDataSource {
       throw Exception('Invalid username or password');
     }
 
-    final usersList = _cacheClient.read<List<Map<String, dynamic>>>(
-          key: _onboardedUsersCacheKey,
-        ) ??
-        [];
+    final usersList = _getOnboardedUsers();
 
-    final filteredUsers = usersList
-        .where(
-          (user) =>
-              user['username'] == username && user['password'] == password,
-        )
-        .toList();
+    final filteredUsers = usersList.where(
+      (map) {
+        final user = jsonDecode(map) as Map<dynamic, dynamic>;
+        return user['username'] == username && user['password'] == password;
+      },
+    ).toList();
 
     if (filteredUsers.isEmpty) {
       throw Exception('Invalid username or password');
     }
 
-    return UserEntity.fromJson(filteredUsers.first);
+    return UserEntity.fromJson(
+      jsonDecode(filteredUsers.first) as Map<String, dynamic>,
+    );
   }
 
   @override
   UserEntity? getCurrentUser() {
-    final user = _cacheClient.read<Map<String, dynamic>>(
+    final user = _cacheClient.read<String>(
       key: _currentUserCacheKey,
     );
 
-    return user == null ? null : UserEntity.fromJson(user);
+    return user == null
+        ? null
+        : UserEntity.fromJson(jsonDecode(user) as Map<String, dynamic>);
   }
 
   @override
   void setCurrentUser(UserEntity user) {
-    _cacheClient.write(key: _currentUserCacheKey, value: user.toJson);
+    _cacheClient.write<String>(
+      key: _currentUserCacheKey,
+      value: jsonEncode(user.toJson),
+    );
   }
 
   @override
@@ -84,8 +93,8 @@ class AuthenticationLocalDataSource implements AuthenticationDataSource {
     _cacheClient.close();
   }
 
-  List<Map<String, dynamic>> _getOnboardedUsers() {
-    return _cacheClient.read<List<Map<String, dynamic>>>(
+  List<String> _getOnboardedUsers() {
+    return _cacheClient.read<List<String>>(
           key: _onboardedUsersCacheKey,
         ) ??
         [];

@@ -13,12 +13,6 @@ class OnboardingCubit extends Cubit<OnboardingState> {
 
   final AuthenticationRepository _authenticationRepository;
 
-  @override
-  Future<void> close() async {
-    await _authenticationRepository.dispose();
-    return super.close();
-  }
-
   void usernameChanged(String value) {
     final username = Username.dirty(value);
     emit(
