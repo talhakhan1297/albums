@@ -1,5 +1,4 @@
 import 'package:albums/app/cubit/app_cubit.dart';
-import 'package:albums/l10n/l10n.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,8 +28,6 @@ class AppView extends StatelessWidget {
         colorSchemeSeed: Colors.green[900],
         useMaterial3: true,
       ),
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
       home: const SizedBox(),
     );
   }
