@@ -11,6 +11,7 @@ dependencies:
     path: packages/album_repository
   authentication_repository:
     path: packages/authentication_repository
+  auto_route: ^7.8.3
   bloc: ^8.1.2
   equatable: ^2.0.5
   flutter:
