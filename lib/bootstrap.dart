@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:album_repository/album_repository.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
@@ -29,9 +30,13 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
   Bloc.observer = const AppBlocObserver();
 
-  GetIt.instance.registerSingleton<AuthenticationRepository>(
-    AuthenticationRepositoryImpl(),
-  );
+  GetIt.instance
+    ..registerSingleton<AuthenticationRepository>(
+      AuthenticationRepositoryImpl(),
+    )
+    ..registerSingleton<AlbumRepository>(
+      AlbumRepositoryImpl(),
+    );
 
   runApp(await builder());
 }
