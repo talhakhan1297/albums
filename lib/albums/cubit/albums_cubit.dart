@@ -3,12 +3,12 @@ import 'package:albums/utils/helpers/api_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-part 'home_state.dart';
+part 'albums_state.dart';
 
-class HomeCubit extends Cubit<HomeState> {
-  HomeCubit({required AlbumRepository albumRepository})
+class AlbumsCubit extends Cubit<AlbumsState> {
+  AlbumsCubit({required AlbumRepository albumRepository})
       : _albumRepository = albumRepository,
-        super(const HomeState());
+        super(const AlbumsState());
 
   final AlbumRepository _albumRepository;
 

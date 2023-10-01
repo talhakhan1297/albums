@@ -1,7 +1,7 @@
-part of 'home_cubit.dart';
+part of 'albums_cubit.dart';
 
-class HomeState extends Equatable {
-  const HomeState({
+class AlbumsState extends Equatable {
+  const AlbumsState({
     this.getAlbumsApiState = const APIState<List<Album>>(),
     this.createAlbumApiState = const APIState<void>(),
     this.deleteAlbumApiState = const APIState<void>(),
@@ -11,12 +11,12 @@ class HomeState extends Equatable {
   final APIState<void> createAlbumApiState;
   final APIState<void> deleteAlbumApiState;
 
-  HomeState copyWith({
+  AlbumsState copyWith({
     APIState<List<Album>>? getAlbumsApiState,
     APIState<void>? createAlbumApiState,
     APIState<void>? deleteAlbumApiState,
   }) {
-    return HomeState(
+    return AlbumsState(
       getAlbumsApiState: getAlbumsApiState ?? this.getAlbumsApiState,
       createAlbumApiState: createAlbumApiState ?? this.createAlbumApiState,
       deleteAlbumApiState: deleteAlbumApiState ?? this.deleteAlbumApiState,
