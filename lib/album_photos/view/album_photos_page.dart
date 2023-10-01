@@ -1,7 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class AlbumPhotosPage extends StatelessWidget {
-  const AlbumPhotosPage({super.key});
+  const AlbumPhotosPage({required this.id, super.key});
+
+  final int id;
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +13,12 @@ class AlbumPhotosPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text('Album Photos'),
-          TextButton(onPressed: () {}, child: const Text('Go Back')),
+          TextButton(
+            onPressed: () {
+              context.router.pop();
+            },
+            child: const Text('Go Back'),
+          ),
         ],
       ),
     );

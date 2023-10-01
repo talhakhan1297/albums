@@ -25,6 +25,11 @@ class AppState extends Equatable {
     );
   }
 
+  bool get isNotOnboarded => !isOnboarded;
+
+  bool get isUnauthenticated =>
+      authenticationStatus != AuthenticationStatus.authenticated;
+
   @override
   List<Object?> get props => [authenticationStatus, user, isOnboarded];
 }

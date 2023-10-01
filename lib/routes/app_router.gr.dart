@@ -16,9 +16,13 @@ abstract class _$AppRouter extends RootStackRouter {
   @override
   final Map<String, PageFactory> pagesMap = {
     AlbumPhotosRoute.name: (routeData) {
+      final args = routeData.argsAs<AlbumPhotosRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const AlbumPhotosView(),
+        child: AlbumPhotosView(
+          id: args.id,
+          key: args.key,
+        ),
       );
     },
     AlbumsRoute.name: (routeData) {
@@ -44,16 +48,40 @@ abstract class _$AppRouter extends RootStackRouter {
 
 /// generated route for
 /// [AlbumPhotosView]
-class AlbumPhotosRoute extends PageRouteInfo<void> {
-  const AlbumPhotosRoute({List<PageRouteInfo>? children})
-      : super(
+class AlbumPhotosRoute extends PageRouteInfo<AlbumPhotosRouteArgs> {
+  AlbumPhotosRoute({
+    required int id,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
           AlbumPhotosRoute.name,
+          args: AlbumPhotosRouteArgs(
+            id: id,
+            key: key,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'AlbumPhotosRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<AlbumPhotosRouteArgs> page =
+      PageInfo<AlbumPhotosRouteArgs>(name);
+}
+
+class AlbumPhotosRouteArgs {
+  const AlbumPhotosRouteArgs({
+    required this.id,
+    this.key,
+  });
+
+  final int id;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'AlbumPhotosRouteArgs{id: $id, key: $key}';
+  }
 }
 
 /// generated route for

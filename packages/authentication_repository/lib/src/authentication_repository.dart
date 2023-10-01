@@ -21,6 +21,8 @@ abstract class AuthenticationRepository {
 
   final StreamController<User> _userAuth = StreamController<User>();
 
+  final StreamController<bool> _onboarding = StreamController<bool>();
+
   /// Stream of [User] which will emit the current user when
   /// the authentication state changes.
   ///
@@ -33,6 +35,13 @@ abstract class AuthenticationRepository {
     });
   }
 
+  /// Stream of [bool] which will emit the current onboarding state when
+  /// the onboarding state changes.
+  Stream<bool> get onboarding async* {
+    yield isOnboarded;
+    yield* _onboarding.stream;
+  }
+
   /// Returns the current cached user.
   /// Defaults to [User.empty] if there is no cached user.
   User get currentUser {
@@ -42,6 +51,9 @@ abstract class AuthenticationRepository {
 
   /// Updates the user stream with the new [user].
   void updateUser(User user) => _userAuth.add(user);
+
+  /// Updates the onboarding stream with the new [value].
+  void updateOnboarding({bool value = false}) => _onboarding.add(value);
 
   /// Register with the provided [username] and [password].
   void onboard({required String username, required String password});
@@ -65,6 +77,7 @@ abstract class AuthenticationRepository {
   /// Disposes the AuthenticationRepository and its dependencies.
   Future<void> dispose() async {
     _authenticationDataSource.dispose();
+    await _onboarding.close();
     await _userAuth.close();
   }
 }

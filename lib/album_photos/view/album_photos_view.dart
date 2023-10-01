@@ -8,7 +8,9 @@ import 'package:get_it/get_it.dart';
 
 @RoutePage()
 class AlbumPhotosView extends StatelessWidget {
-  const AlbumPhotosView({super.key});
+  const AlbumPhotosView({required this.id, super.key});
+
+  final int id;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class AlbumPhotosView extends StatelessWidget {
       create: (context) => AlbumPhotosCubit(
         albumRepository: GetIt.I<AlbumRepository>(),
       ),
-      child: const AlbumPhotosPage(),
+      child: AlbumPhotosPage(id: id),
     );
   }
 }

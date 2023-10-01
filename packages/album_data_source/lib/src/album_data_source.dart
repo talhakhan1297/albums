@@ -25,4 +25,7 @@ abstract class AlbumDataSource {
 
   /// Fetches list of [AlbumPhotoEntity] with the provided [id].
   Future<List<AlbumPhotoEntity>> getAlbumPhotos(int id);
+
+  /// Dispose the AlbumDataSource and its dependencies.
+  void dispose();
 }

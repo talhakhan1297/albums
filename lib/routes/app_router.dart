@@ -3,6 +3,7 @@ import 'package:albums/albums/albums.dart';
 import 'package:albums/login/login.dart';
 import 'package:albums/onboarding/onboarding.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/widgets.dart';
 
 part 'app_router.gr.dart';
 
@@ -12,7 +13,9 @@ class AppRouter extends _$AppRouter {
   List<AutoRoute> get routes => [
         AutoRoute(page: OnboardingRoute.page),
         AutoRoute(page: LoginRoute.page),
-        AutoRoute(page: AlbumsRoute.page),
-        AutoRoute(page: AlbumPhotosRoute.page),
+        AutoRoute(
+          page: AlbumsRoute.page,
+          children: [AutoRoute(page: AlbumPhotosRoute.page)],
+        ),
       ];
 }

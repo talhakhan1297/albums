@@ -31,4 +31,9 @@ class AlbumRepositoryImpl implements AlbumRepository {
     final data = await _albumDataSource.getAlbumPhotos(id);
     return data.map(AlbumPhoto.fromEntity).toList();
   }
+
+  @override
+  void dispose() {
+    _albumDataSource.dispose();
+  }
 }

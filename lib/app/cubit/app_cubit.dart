@@ -18,14 +18,18 @@ class AppCubit extends Cubit<AppState> {
             isOnboarded: authenticationRepository.isOnboarded,
           ),
         ) {
+    _onboardingSubscription =
+        authenticationRepository.onboarding.listen(_onOnboardingChanged);
     _userSubscription = authenticationRepository.user.listen(_onUserChanged);
   }
 
   final AuthenticationRepository _authenticationRepository;
   late final StreamSubscription<User> _userSubscription;
+  late final StreamSubscription<bool> _onboardingSubscription;
 
   @override
   Future<void> close() async {
+    await _onboardingSubscription.cancel();
     await _userSubscription.cancel();
     await _authenticationRepository.dispose();
     return super.close();
@@ -41,6 +45,9 @@ class AppCubit extends Cubit<AppState> {
       ),
     );
   }
+
+  void _onOnboardingChanged(bool value) =>
+      emit(state.copyWith(isOnboarded: value));
 
   void onLogoutRequested() => _authenticationRepository.logout();
 }

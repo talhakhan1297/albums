@@ -23,4 +23,7 @@ abstract class AlbumRepository {
 
   /// Fetches list of [AlbumPhoto] with the provided [id].
   Future<List<AlbumPhoto>> getAlbumPhotos(int id);
+
+  /// Disposes the AlbumRepository and its dependencies.
+  void dispose();
 }

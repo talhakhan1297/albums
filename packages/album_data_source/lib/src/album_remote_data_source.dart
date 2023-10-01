@@ -72,4 +72,9 @@ class AlbumRemoteDataSource implements AlbumDataSource {
         .map((e) => AlbumPhotoEntity.fromJson(e as Map<String, dynamic>))
         .toList();
   }
+
+  @override
+  void dispose() {
+    _httpClient.close();
+  }
 }

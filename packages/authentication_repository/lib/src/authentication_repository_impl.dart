@@ -10,6 +10,8 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       username: username,
       password: password,
     );
+
+    updateOnboarding(value: true);
   }
 
   @override

@@ -12,6 +12,12 @@ class AlbumPhotosCubit extends Cubit<AlbumPhotosState> {
 
   final AlbumRepository _albumRepository;
 
+  @override
+  Future<void> close() {
+    _albumRepository.dispose();
+    return super.close();
+  }
+
   Future<void> albumPhotosRequested(int id) async {
     emit(
       state.copyWith(
