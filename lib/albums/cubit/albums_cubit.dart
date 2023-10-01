@@ -12,7 +12,7 @@ class AlbumsCubit extends Cubit<AlbumsState> {
 
   final AlbumRepository _albumRepository;
 
-  Future<void> getAlbums() async {
+  Future<void> albumsRequested() async {
     emit(
       state.copyWith(getAlbumsApiState: state.getAlbumsApiState.toLoading()),
     );
@@ -40,7 +40,7 @@ class AlbumsCubit extends Cubit<AlbumsState> {
     }
   }
 
-  Future<void> createAlbum() async {
+  Future<void> createAlbumRequested() async {
     emit(
       state.copyWith(
         createAlbumApiState: state.createAlbumApiState.toLoading(),
@@ -72,7 +72,7 @@ class AlbumsCubit extends Cubit<AlbumsState> {
     }
   }
 
-  Future<void> deleteAlbum(int id) async {
+  Future<void> deleteAlbumRequested(int id) async {
     emit(
       state.copyWith(
         deleteAlbumApiState: state.deleteAlbumApiState.toLoading(),
