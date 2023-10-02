@@ -39,4 +39,22 @@ class OnboardingState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
+
+  String? get usernameError {
+    if (username.isPure) return null;
+    if (username.error == UsernameValidationError.invalid) {
+      return 'Please enter a valid username.';
+    } else if (errorMessage != null) {
+      return errorMessage;
+    }
+    return null;
+  }
+
+  String? get passwordError {
+    if (password.isPure) return null;
+    if (password.error == PasswordValidationError.invalid) {
+      return 'Please enter a valid password.';
+    }
+    return null;
+  }
 }

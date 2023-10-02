@@ -6,25 +6,30 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 class App extends StatelessWidget {
-  const App({super.key});
+  App({super.key});
+
+  static final _appCubit = AppCubit(
+    authenticationRepository: GetIt.I<AuthenticationRepository>(),
+  );
+
+  final appRouter = AppRouter(_appCubit);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AppCubit(
-        authenticationRepository: GetIt.I<AuthenticationRepository>(),
-      ),
-      child: const AppView(),
+      create: (context) => _appCubit,
+      child: AppView(appRouter: appRouter),
     );
   }
 }
 
 class AppView extends StatelessWidget {
-  const AppView({super.key});
+  const AppView({required this.appRouter, super.key});
+
+  final AppRouter appRouter;
 
   @override
   Widget build(BuildContext context) {
-    final appRouter = AppRouter(context.read<AppCubit>());
     return MaterialApp.router(
       theme: ThemeData(
         colorSchemeSeed: Colors.green[900],
