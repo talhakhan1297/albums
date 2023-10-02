@@ -44,8 +44,6 @@ class OnboardingState extends Equatable {
     if (username.isPure) return null;
     if (username.error == UsernameValidationError.invalid) {
       return 'Please enter a valid username.';
-    } else if (errorMessage != null) {
-      return errorMessage;
     }
     return null;
   }

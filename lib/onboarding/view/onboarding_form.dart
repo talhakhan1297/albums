@@ -1,5 +1,6 @@
 import 'package:albums/onboarding/cubit/onboarding_cubit.dart';
 import 'package:albums/routes/routes.dart';
+import 'package:albums/utils/helpers/snackbar.dart';
 import 'package:albums/utils/widgets/widgets.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class OnboardingForm extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Title(),
+            TitleWidget(text: 'Onboarding'),
             SizedBox(height: 48),
             UsernameTextField(),
             SizedBox(height: 16),
@@ -28,18 +29,6 @@ class OnboardingForm extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class Title extends StatelessWidget {
-  const Title({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      'Onboarding',
-      style: Theme.of(context).textTheme.displaySmall,
     );
   }
 }
@@ -97,7 +86,12 @@ class SaveButton extends StatelessWidget {
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) async {
         if (state.status.isSuccess) {
-          await context.router.push(const LoginRoute());
+          await context.router.pushAndPopUntil(
+            const LoginRoute(),
+            predicate: (_) => false,
+          );
+        } else if (state.status.isFailure) {
+          context.errorSnackbar(state.errorMessage ?? 'Something went wrong!');
         }
       },
       buildWhen: (previous, current) =>
