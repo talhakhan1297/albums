@@ -36,6 +36,7 @@ class AppView extends StatelessWidget {
         useMaterial3: true,
       ),
       routerConfig: appRouter.config(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

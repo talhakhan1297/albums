@@ -41,16 +41,14 @@ class LoginState extends Equatable {
   }
 
   String? get usernameError {
-    if (username.isPure) return null;
-    if (username.error == UsernameValidationError.invalid) {
+    if (username.displayError == UsernameValidationError.invalid) {
       return 'Please enter a valid username.';
     }
     return null;
   }
 
   String? get passwordError {
-    if (password.isPure) return null;
-    if (password.error == PasswordValidationError.invalid) {
+    if (password.displayError == PasswordValidationError.invalid) {
       return 'Please enter a valid password.';
     }
     return null;
