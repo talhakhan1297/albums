@@ -8,9 +8,9 @@ class AlbumRemoteDataSource implements AlbumDataSource {
   AlbumRemoteDataSource({http.Client? httpClient})
       : _httpClient = httpClient ?? http.Client();
 
-  static const _baseUrl = 'https://jsonplaceholder.typicode.com';
-  static const _albumsEndpoint = '/albums';
-  static const _photosEndpoint = '/photos';
+  static const _baseUrl = 'jsonplaceholder.typicode.com';
+  static const _albumsEndpoint = 'albums';
+  static const _photosEndpoint = 'photos';
 
   final http.Client _httpClient;
 
@@ -58,7 +58,10 @@ class AlbumRemoteDataSource implements AlbumDataSource {
 
   @override
   Future<List<AlbumPhotoEntity>> getAlbumPhotos(int id) async {
-    final request = Uri.https(_baseUrl, '/$id$_photosEndpoint');
+    final request = Uri.https(
+      _baseUrl,
+      '$_albumsEndpoint/$id/$_photosEndpoint',
+    );
 
     final response = await _httpClient.get(request);
 

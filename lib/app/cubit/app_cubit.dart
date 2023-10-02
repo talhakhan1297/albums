@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:get_it/get_it.dart';
 
 part 'app_state.dart';
 
@@ -32,6 +33,7 @@ class AppCubit extends Cubit<AppState> {
     await _onboardingSubscription.cancel();
     await _userSubscription.cancel();
     await _authenticationRepository.dispose();
+    await GetIt.I<AuthenticationRepository>().dispose();
     return super.close();
   }
 

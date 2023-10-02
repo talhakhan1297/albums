@@ -15,7 +15,7 @@ class AlbumsView extends StatelessWidget {
     return BlocProvider(
       create: (context) => AlbumsCubit(
         albumRepository: GetIt.I<AlbumRepository>(),
-      ),
+      )..albumsRequested(),
       child: const AlbumsPage(),
     );
   }

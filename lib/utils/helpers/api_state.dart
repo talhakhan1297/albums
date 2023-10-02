@@ -1,12 +1,10 @@
 import 'package:equatable/equatable.dart';
 
 enum APICallState {
-  initial,
   loading,
   loaded,
   failure;
 
-  bool get isInitial => this == APICallState.initial;
   bool get isLoading => this == APICallState.loading;
   bool get isLoaded => this == APICallState.loaded;
   bool get isFailure => this == APICallState.failure;
@@ -15,7 +13,7 @@ enum APICallState {
 class APIState<T> extends Equatable {
   const APIState({
     this.data,
-    this.state = APICallState.initial,
+    this.state = APICallState.loading,
     this.error,
   });
 
@@ -35,8 +33,6 @@ class APIState<T> extends Equatable {
     );
   }
 
-  bool get isInitial => state.isInitial;
-
   bool get isLoading => state.isLoading;
 
   bool get isLoaded => state.isLoaded;
@@ -50,8 +46,6 @@ class APIState<T> extends Equatable {
   bool get isNotEmpty => !isEmpty;
 
   bool get hasError => error?.isNotEmpty ?? false;
-
-  APIState<T> toInitial() => copyWith(state: APICallState.initial);
 
   APIState<T> toLoading() => copyWith(state: APICallState.loading);
 
