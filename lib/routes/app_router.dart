@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:albums/album_photos/album_photos.dart';
 import 'package:albums/albums/albums.dart';
 import 'package:albums/app/app.dart';
@@ -15,16 +17,29 @@ class AppRouter extends _$AppRouter {
   AppRouter(this.appCubit);
 
   final AppCubit appCubit;
+  late final AuthenticationGuard authenticationGuard;
 
   @override
-  List<AutoRoute> get routes => [
-        AutoRoute(page: OnboardingRoute.page),
-        AutoRoute(page: LoginRoute.page, guards: [OnboardingGuard(appCubit)]),
-        AutoRoute(
-          initial: true,
-          page: AlbumsRoute.page,
-          guards: [AuthenticationGuard(appCubit)],
-        ),
-        AutoRoute(page: AlbumPhotosRoute.page),
-      ];
+  List<AutoRoute> get routes {
+    authenticationGuard = AuthenticationGuard(appCubit);
+    return [
+      AutoRoute(page: OnboardingRoute.page),
+      AutoRoute(
+        page: LoginRoute.page,
+        guards: [OnboardingGuard(appCubit)],
+      ),
+      AutoRoute(
+        initial: true,
+        page: AlbumsRoute.page,
+        guards: [authenticationGuard],
+      ),
+      AutoRoute(page: AlbumPhotosRoute.page),
+    ];
+  }
+
+  @override
+  Future<void> dispose() async {
+    await authenticationGuard.dispose();
+    super.dispose();
+  }
 }

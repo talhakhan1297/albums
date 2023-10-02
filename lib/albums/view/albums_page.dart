@@ -24,10 +24,6 @@ class AlbumsPage extends StatelessWidget {
             TextButton(
               onPressed: () {
                 context.read<AppCubit>().onLogoutRequested();
-                context.router.pushAndPopUntil(
-                  const LoginRoute(),
-                  predicate: (_) => false,
-                );
               },
               child: const Text('logout'),
             ),

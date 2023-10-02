@@ -1,8 +1,6 @@
 import 'package:albums/onboarding/cubit/onboarding_cubit.dart';
-import 'package:albums/routes/routes.dart';
 import 'package:albums/utils/helpers/snackbar.dart';
 import 'package:albums/utils/widgets/widgets.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -85,12 +83,7 @@ class SaveButton extends StatelessWidget {
     return BlocConsumer<OnboardingCubit, OnboardingState>(
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) async {
-        if (state.status.isSuccess) {
-          await context.router.pushAndPopUntil(
-            const LoginRoute(),
-            predicate: (_) => false,
-          );
-        } else if (state.status.isFailure) {
+        if (state.status.isFailure) {
           context.errorSnackbar(state.errorMessage ?? 'Something went wrong!');
         }
       },

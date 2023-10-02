@@ -9,8 +9,7 @@ class OnboardingGuard extends AutoRouteGuard {
 
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) {
-    final isOnboarded = appCubit.state.isOnboarded;
-    if (isOnboarded) {
+    if (appCubit.state.isOnboarded) {
       resolver.next();
     } else {
       resolver.redirect(const OnboardingRoute());
