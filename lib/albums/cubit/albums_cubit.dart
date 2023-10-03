@@ -72,19 +72,22 @@ class AlbumsCubit extends Cubit<AlbumsState> {
     }
   }
 
-  Future<void> deleteAlbumRequested(int id) async {
-    emit(
-      state.copyWith(
-        deleteAlbumApiState: state.deleteAlbumApiState.toLoading(),
-      ),
-    );
+  Future<void> deleteAlbumRequested(int index) async {
+    final albums = state.albums.map((e) => e).toList();
+    final id = albums[index].id;
 
     try {
-      await _albumRepository.deleteAlbum(id);
+      if (id != null) {
+        await _albumRepository.deleteAlbum(id);
+        albums.removeAt(index);
+      }
 
       emit(
         state.copyWith(
           deleteAlbumApiState: state.deleteAlbumApiState.toLoaded(),
+          getAlbumsApiState: state.getAlbumsApiState.copyWith(
+            data: albums,
+          ),
         ),
       );
     } on Exception catch (e) {
@@ -103,4 +106,7 @@ class AlbumsCubit extends Cubit<AlbumsState> {
       );
     }
   }
+
+  void resetDeleteAlbumApiState() =>
+      emit(state.copyWith(deleteAlbumApiState: const APIState<void>()));
 }
