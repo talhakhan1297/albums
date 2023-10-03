@@ -17,8 +17,9 @@ class AlbumRepositoryImpl implements AlbumRepository {
   }
 
   @override
-  Future<void> createAlbum() async {
-    await _albumDataSource.createAlbum();
+  Future<Album> createAlbum(AlbumDto dto) async {
+    final entity = await _albumDataSource.createAlbum(dto);
+    return Album.fromEntity(entity);
   }
 
   @override

@@ -32,17 +32,19 @@ class AlbumRemoteDataSource implements AlbumDataSource {
   }
 
   @override
-  Future<void> createAlbum() async {
+  Future<AlbumEntity> createAlbum(AlbumDto dto) async {
     final request = Uri.https(_baseUrl, _albumsEndpoint);
 
     final response = await _httpClient.post(
       request,
-      body: {'userId': 1, 'id': 1, 'title': 'lorem ipsum'},
+      body: jsonEncode(dto.toJson),
     );
 
-    if (response.statusCode != 200) {
+    if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception('Something went wrong!');
     }
+
+    return AlbumEntity(userId: dto.userId, id: dto.id, title: dto.title);
   }
 
   @override

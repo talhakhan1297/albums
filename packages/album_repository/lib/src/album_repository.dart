@@ -19,7 +19,7 @@ abstract class AlbumRepository {
   Future<void> deleteAlbum(int id);
 
   /// Creates an albums.
-  Future<void> createAlbum();
+  Future<Album> createAlbum(AlbumDto dto);
 
   /// Fetches list of [AlbumPhoto] with the provided [id].
   Future<List<AlbumPhoto>> getAlbumPhotos(int id);

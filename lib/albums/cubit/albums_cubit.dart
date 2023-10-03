@@ -47,12 +47,19 @@ class AlbumsCubit extends Cubit<AlbumsState> {
       ),
     );
 
+    final albums = state.albums.map((e) => e).toList();
+
     try {
-      await _albumRepository.createAlbum();
+      final newAlbum = await _albumRepository.createAlbum(
+        const AlbumDto(id: 1, userId: 1, title: 'lorem ipsum'),
+      );
+
+      albums.insert(0, newAlbum);
 
       emit(
         state.copyWith(
           createAlbumApiState: state.createAlbumApiState.toLoaded(),
+          getAlbumsApiState: state.getAlbumsApiState.copyWith(data: albums),
         ),
       );
     } on Exception catch (e) {
@@ -74,12 +81,22 @@ class AlbumsCubit extends Cubit<AlbumsState> {
 
   Future<void> deleteAlbumRequested(int index) async {
     final albums = state.albums.map((e) => e).toList();
-    final id = albums[index].id;
+    final album = albums[index];
+    final id = album.id;
+    albums.removeAt(index);
+
+    emit(
+      state.copyWith(
+        deleteAlbumApiState: state.deleteAlbumApiState.toLoading(),
+        getAlbumsApiState: state.getAlbumsApiState.copyWith(data: albums),
+      ),
+    );
 
     try {
       if (id != null) {
         await _albumRepository.deleteAlbum(id);
-        albums.removeAt(index);
+      } else {
+        throw Exception('Something went wrong!');
       }
 
       emit(
@@ -91,22 +108,23 @@ class AlbumsCubit extends Cubit<AlbumsState> {
         ),
       );
     } on Exception catch (e) {
+      albums.insert(index, album);
       emit(
         state.copyWith(
           deleteAlbumApiState: state.deleteAlbumApiState.toFailure(
             error: e.toString(),
           ),
+          getAlbumsApiState: state.getAlbumsApiState.copyWith(data: albums),
         ),
       );
     } catch (_) {
+      albums.insert(index, album);
       emit(
         state.copyWith(
           deleteAlbumApiState: state.deleteAlbumApiState.toFailure(),
+          getAlbumsApiState: state.getAlbumsApiState.copyWith(data: albums),
         ),
       );
     }
   }
-
-  void resetDeleteAlbumApiState() =>
-      emit(state.copyWith(deleteAlbumApiState: const APIState<void>()));
 }

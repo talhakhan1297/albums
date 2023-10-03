@@ -25,10 +25,7 @@ class AlbumsPage extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: context.read<AlbumsCubit>().createAlbumRequested,
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: const AddAlbumButton(),
       body: BlocConsumer<AlbumsCubit, AlbumsState>(
         listenWhen: (previous, current) =>
             previous.deleteAlbumApiState != current.deleteAlbumApiState,
@@ -40,7 +37,6 @@ class AlbumsPage extends StatelessWidget {
               state.deleteAlbumApiState.error ?? 'Failed to delete the album.',
             );
           }
-          context.read<AlbumsCubit>().resetDeleteAlbumApiState();
         },
         buildWhen: (previous, current) =>
             previous.getAlbumsApiState != current.getAlbumsApiState ||
@@ -56,9 +52,47 @@ class AlbumsPage extends StatelessWidget {
                 state.getAlbumsApiState.error,
                 onTryAgain: context.read<AlbumsCubit>().albumsRequested,
               );
+            case APICallState.initial:
+              return const SizedBox();
           }
         },
       ),
+    );
+  }
+}
+
+class AddAlbumButton extends StatelessWidget {
+  const AddAlbumButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<AlbumsCubit, AlbumsState>(
+      listenWhen: (previous, current) =>
+          previous.createAlbumApiState != current.createAlbumApiState,
+      listener: (context, state) {
+        if (state.createAlbumApiState.isLoaded) {
+          context.successSnackbar('Album created successfully.');
+        } else if (state.createAlbumApiState.isFailure) {
+          context.errorSnackbar(
+            state.createAlbumApiState.error ?? 'Failed to create the album.',
+          );
+        }
+      },
+      buildWhen: (previous, current) =>
+          previous.createAlbumApiState != current.createAlbumApiState,
+      builder: (context, state) {
+        return FloatingActionButton(
+          onPressed: context.read<AlbumsCubit>().createAlbumRequested,
+          child: state.createAlbumApiState.isLoading
+              ? const SizedBox.square(
+                  dimension: 24,
+                  child: CircularProgressIndicator.adaptive(),
+                )
+              : const Icon(Icons.add),
+        );
+      },
     );
   }
 }
@@ -70,15 +104,6 @@ class _AlbumsSuccess extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final backgroundColor = theme.colorScheme.error;
-    final iconColor = theme.colorScheme.onError;
-
-    final deleteIcon = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Icon(Icons.delete, color: iconColor),
-    );
-
     return ListView.builder(
       padding: const EdgeInsets.only(bottom: 96),
       itemCount: albums.length,
@@ -86,12 +111,13 @@ class _AlbumsSuccess extends StatelessWidget {
         final album = albums[index];
         return Dismissible(
           key: UniqueKey(),
-          background: ColoredBox(
-            color: backgroundColor,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [deleteIcon, deleteIcon],
-            ),
+          background: _dismissibleBackground(
+            context,
+            Alignment.centerLeft,
+          ),
+          secondaryBackground: _dismissibleBackground(
+            context,
+            Alignment.centerRight,
           ),
           onDismissed: (_) =>
               context.read<AlbumsCubit>().deleteAlbumRequested(index),
@@ -107,6 +133,23 @@ class _AlbumsSuccess extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget _dismissibleBackground(
+    BuildContext context,
+    AlignmentGeometry alignment,
+  ) {
+    final theme = Theme.of(context);
+    final backgroundColor = theme.colorScheme.error;
+    final iconColor = theme.colorScheme.onError;
+    return Container(
+      alignment: alignment,
+      color: backgroundColor,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Icon(Icons.delete, color: iconColor),
+      ),
     );
   }
 }

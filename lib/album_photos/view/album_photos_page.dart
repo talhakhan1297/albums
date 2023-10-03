@@ -30,6 +30,8 @@ class AlbumPhotosPage extends StatelessWidget {
                 onTryAgain: () =>
                     context.read<AlbumPhotosCubit>().albumPhotosRequested(id),
               );
+            case APICallState.initial:
+              return const SizedBox();
           }
         },
       ),

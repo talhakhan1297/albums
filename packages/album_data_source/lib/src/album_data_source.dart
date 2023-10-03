@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:album_data_source/src/entities/entities.dart';
+import 'package:album_repository/album_repository.dart';
 import 'package:http/http.dart' as http;
 
 export 'package:album_data_source/src/entities/entities.dart';
@@ -21,7 +22,7 @@ abstract class AlbumDataSource {
   Future<void> deleteAlbum(int id);
 
   /// Creates an albums.
-  Future<void> createAlbum();
+  Future<AlbumEntity> createAlbum(AlbumDto dto);
 
   /// Fetches list of [AlbumPhotoEntity] with the provided [id].
   Future<List<AlbumPhotoEntity>> getAlbumPhotos(int id);
