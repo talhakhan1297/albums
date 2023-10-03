@@ -62,6 +62,7 @@ class _AlbumPhotosSuccess extends StatelessWidget {
             children: [
               Flexible(
                 child: ClipRRect(
+                  clipBehavior: Clip.hardEdge,
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(8)),
                   child: Image.network(
@@ -70,6 +71,10 @@ class _AlbumPhotosSuccess extends StatelessWidget {
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) =>
                         const Center(child: Icon(Icons.image)),
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(child: Icon(Icons.image));
+                    },
                   ),
                 ),
               ),
