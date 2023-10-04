@@ -1,5 +1,6 @@
 import 'package:albums/app/cubit/app_cubit.dart';
 import 'package:albums/routes/routes.dart';
+import 'package:albums/utils/constants/constants.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +33,7 @@ class AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       theme: ThemeData(
-        colorSchemeSeed: Colors.green[900],
+        colorSchemeSeed: Constants.colorSchemeSeed,
         useMaterial3: true,
       ),
       routerConfig: appRouter.config(),

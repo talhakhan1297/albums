@@ -1,5 +1,6 @@
 import 'package:album_repository/album_repository.dart';
 import 'package:albums/album_photos/cubit/album_photos_cubit.dart';
+import 'package:albums/utils/constants/constants.dart';
 import 'package:albums/utils/helpers/api_state.dart';
 import 'package:albums/utils/widgets/api_failure.dart';
 import 'package:albums/utils/widgets/api_loading.dart';
@@ -14,7 +15,7 @@ class AlbumPhotosPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Album Photos')),
+      appBar: AppBar(title: const Text(Constants.albumPhotosTitle)),
       body: BlocBuilder<AlbumPhotosCubit, AlbumPhotosState>(
         buildWhen: (previous, current) =>
             previous.getAlbumPhotosApiState != current.getAlbumPhotosApiState,
@@ -44,16 +45,43 @@ class _AlbumPhotosSuccess extends StatelessWidget {
 
   final List<AlbumPhoto> albumPhotos;
 
+  static const _placeHolderIcon = Center(child: Icon(Icons.image));
+
+  static const _gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: 2,
+    crossAxisSpacing: 12,
+    mainAxisSpacing: 12,
+    childAspectRatio: 1 / 1.5,
+  );
+
+  static const _borderRadius = BorderRadius.vertical(top: Radius.circular(8));
+
+  static const _gridPadding =
+      EdgeInsets.symmetric(horizontal: 24, vertical: 16);
+
+  static const _titlePadding = EdgeInsets.all(8);
+
+  Widget errorBuilder(
+    BuildContext context,
+    Object error,
+    StackTrace? stackTrace,
+  ) =>
+      _placeHolderIcon;
+
+  Widget loadingBuilder(
+    BuildContext context,
+    Widget child,
+    ImageChunkEvent? loadingProgress,
+  ) {
+    if (loadingProgress == null) return child;
+    return _placeHolderIcon;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-        childAspectRatio: 1 / 1.5,
-      ),
+      padding: _gridPadding,
+      gridDelegate: _gridDelegate,
       itemCount: albumPhotos.length,
       itemBuilder: (context, index) {
         final albumPhoto = albumPhotos[index];
@@ -63,25 +91,20 @@ class _AlbumPhotosSuccess extends StatelessWidget {
               Flexible(
                 child: ClipRRect(
                   clipBehavior: Clip.hardEdge,
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(8)),
+                  borderRadius: _borderRadius,
                   child: Image.network(
                     albumPhoto.thumbnailUrl ?? '',
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) =>
-                        const Center(child: Icon(Icons.image)),
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return const Center(child: Icon(Icons.image));
-                    },
+                    errorBuilder: errorBuilder,
+                    loadingBuilder: loadingBuilder,
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8),
+                padding: _titlePadding,
                 child: Text(
-                  albumPhoto.title ?? 'Untitled',
+                  albumPhoto.title ?? Constants.untitled,
                   textAlign: TextAlign.center,
                 ),
               ),

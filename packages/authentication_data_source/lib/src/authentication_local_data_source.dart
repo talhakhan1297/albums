@@ -13,6 +13,9 @@ class AuthenticationLocalDataSource implements AuthenticationDataSource {
   static const _onboardedUsersCacheKey = '__onboarded_users_cache_key__';
   static const _currentUserCacheKey = '__current_user_cache_key__';
 
+  static const _invalidInfoMessage = 'Invalid username or password';
+  static const _userAlreadyExistMessage = 'User already exists.';
+
   @override
   bool get isOnboarded => _getOnboardedUsers().isNotEmpty;
 
@@ -20,7 +23,7 @@ class AuthenticationLocalDataSource implements AuthenticationDataSource {
   @override
   void onboard({required String username, required String password}) {
     if (username.isEmpty || password.isEmpty) {
-      throw Exception('Invalid username or password');
+      throw Exception(_invalidInfoMessage);
     }
 
     final usersList = _getOnboardedUsers();
@@ -30,7 +33,7 @@ class AuthenticationLocalDataSource implements AuthenticationDataSource {
         .toList();
 
     if (users.any((user) => user.username == username)) {
-      throw Exception('User already exists.');
+      throw Exception(_userAlreadyExistMessage);
     }
 
     usersList.add(jsonEncode({'username': username, 'password': password}));
@@ -48,7 +51,7 @@ class AuthenticationLocalDataSource implements AuthenticationDataSource {
     required String password,
   }) {
     if (username.isEmpty || password.isEmpty) {
-      throw Exception('Invalid username or password');
+      throw Exception(_invalidInfoMessage);
     }
 
     final usersList = _getOnboardedUsers();
@@ -61,7 +64,7 @@ class AuthenticationLocalDataSource implements AuthenticationDataSource {
     ).toList();
 
     if (filteredUsers.isEmpty) {
-      throw Exception('Invalid username or password');
+      throw Exception(_invalidInfoMessage);
     }
 
     return UserEntity.fromJson(

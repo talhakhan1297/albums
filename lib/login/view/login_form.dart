@@ -1,4 +1,5 @@
 import 'package:albums/login/cubit/login_cubit.dart';
+import 'package:albums/utils/constants/constants.dart';
 import 'package:albums/utils/helpers/snackbar.dart';
 import 'package:albums/utils/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class LoginForm extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TitleWidget(text: 'Login'),
+            TitleWidget(text: Constants.loginTitle),
             SizedBox(height: 48),
             UsernameTextField(),
             SizedBox(height: 16),
@@ -42,8 +43,8 @@ class UsernameTextField extends StatelessWidget {
           previous.errorMessage != current.errorMessage,
       builder: (context, state) {
         return CustomTextField(
-          label: 'Username',
-          hintText: 'e.g. awesomeUser',
+          label: Constants.usernameLabel,
+          hintText: Constants.usernameHint,
           initialValue: state.username.value,
           inputFormatters: [LengthLimitingTextInputFormatter(50)],
           errorMessage: state.usernameError,
@@ -63,8 +64,8 @@ class PasswordTextField extends StatelessWidget {
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return CustomTextField(
-          label: 'Password',
-          hintText: 'e.g. 12345678',
+          label: Constants.passwordLabel,
+          hintText: Constants.passswordHint,
           obscureText: true,
           textInputAction: TextInputAction.done,
           initialValue: state.password.value,
@@ -86,7 +87,7 @@ class LoginButton extends StatelessWidget {
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) async {
         if (state.status.isFailure) {
-          context.errorSnackbar(state.errorMessage ?? 'Something went wrong!');
+          context.errorSnackbar(state.errorMessage ?? Constants.generalError);
         }
       },
       buildWhen: (previous, current) =>
@@ -95,7 +96,7 @@ class LoginButton extends StatelessWidget {
       builder: (context, state) {
         return PrimaryButton(
           isLoading: state.status.isInProgress,
-          text: 'Login',
+          text: Constants.loginTitle,
           onPressed: state.isValid
               ? () => context.read<LoginCubit>().loginFormSubmitted()
               : null,

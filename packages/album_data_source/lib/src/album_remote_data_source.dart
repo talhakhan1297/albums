@@ -12,6 +12,8 @@ class AlbumRemoteDataSource implements AlbumDataSource {
   static const _albumsEndpoint = 'albums';
   static const _photosEndpoint = 'photos';
 
+  static const _generalErrorMessage = 'Something went wrong!';
+
   final http.Client _httpClient;
 
   @override
@@ -21,7 +23,7 @@ class AlbumRemoteDataSource implements AlbumDataSource {
     final response = await _httpClient.get(request);
 
     if (response.statusCode != 200) {
-      throw Exception('Something went wrong!');
+      throw Exception(_generalErrorMessage);
     }
 
     final bodyJson = jsonDecode(response.body) as List;
@@ -41,7 +43,7 @@ class AlbumRemoteDataSource implements AlbumDataSource {
     );
 
     if (response.statusCode != 200 && response.statusCode != 201) {
-      throw Exception('Something went wrong!');
+      throw Exception(_generalErrorMessage);
     }
 
     return AlbumEntity(userId: dto.userId, id: dto.id, title: dto.title);
@@ -54,7 +56,7 @@ class AlbumRemoteDataSource implements AlbumDataSource {
     final response = await _httpClient.delete(request);
 
     if (response.statusCode != 200) {
-      throw Exception('Something went wrong!');
+      throw Exception(_generalErrorMessage);
     }
   }
 
@@ -68,7 +70,7 @@ class AlbumRemoteDataSource implements AlbumDataSource {
     final response = await _httpClient.get(request);
 
     if (response.statusCode != 200) {
-      throw Exception('Something went wrong!');
+      throw Exception(_generalErrorMessage);
     }
 
     final bodyJson = jsonDecode(response.body) as List;

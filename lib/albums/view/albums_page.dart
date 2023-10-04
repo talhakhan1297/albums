@@ -2,6 +2,7 @@ import 'package:album_repository/album_repository.dart';
 import 'package:albums/albums/cubit/albums_cubit.dart';
 import 'package:albums/app/cubit/app_cubit.dart';
 import 'package:albums/routes/routes.dart';
+import 'package:albums/utils/constants/constants.dart';
 import 'package:albums/utils/helpers/api_state.dart';
 import 'package:albums/utils/helpers/snackbar.dart';
 import 'package:albums/utils/widgets/api_failure.dart';
@@ -17,7 +18,7 @@ class AlbumsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Albums'),
+        title: const Text(Constants.albumsTitle),
         actions: [
           IconButton(
             onPressed: context.read<AppCubit>().onLogoutRequested,
@@ -31,10 +32,11 @@ class AlbumsPage extends StatelessWidget {
             previous.deleteAlbumApiState != current.deleteAlbumApiState,
         listener: (context, state) {
           if (state.deleteAlbumApiState.isLoaded) {
-            context.successSnackbar('Album deleted successfully.');
+            context.successSnackbar(Constants.albumDeletedMessage);
           } else if (state.deleteAlbumApiState.isFailure) {
             context.errorSnackbar(
-              state.deleteAlbumApiState.error ?? 'Failed to delete the album.',
+              state.deleteAlbumApiState.error ??
+                  Constants.albumDeleteFailedMessage,
             );
           }
         },
@@ -62,9 +64,14 @@ class AlbumsPage extends StatelessWidget {
 }
 
 class AddAlbumButton extends StatelessWidget {
-  const AddAlbumButton({
-    super.key,
-  });
+  const AddAlbumButton({super.key});
+
+  static const _loadingIndicator = SizedBox.square(
+    dimension: 24,
+    child: CircularProgressIndicator.adaptive(),
+  );
+
+  static const _addIcon = Icon(Icons.add);
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +80,11 @@ class AddAlbumButton extends StatelessWidget {
           previous.createAlbumApiState != current.createAlbumApiState,
       listener: (context, state) {
         if (state.createAlbumApiState.isLoaded) {
-          context.successSnackbar('Album created successfully.');
+          context.successSnackbar(Constants.albumCreatedMessage);
         } else if (state.createAlbumApiState.isFailure) {
           context.errorSnackbar(
-            state.createAlbumApiState.error ?? 'Failed to create the album.',
+            state.createAlbumApiState.error ??
+                Constants.albumCreateFailedMessage,
           );
         }
       },
@@ -86,11 +94,8 @@ class AddAlbumButton extends StatelessWidget {
         return FloatingActionButton(
           onPressed: context.read<AlbumsCubit>().createAlbumRequested,
           child: state.createAlbumApiState.isLoading
-              ? const SizedBox.square(
-                  dimension: 24,
-                  child: CircularProgressIndicator.adaptive(),
-                )
-              : const Icon(Icons.add),
+              ? _loadingIndicator
+              : _addIcon,
         );
       },
     );
@@ -102,37 +107,46 @@ class _AlbumsSuccess extends StatelessWidget {
 
   final List<Album> albums;
 
+  static const _tilePadding = EdgeInsets.fromLTRB(24, 0, 24, 12);
+  static const _listPadding = EdgeInsets.only(bottom: 96);
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: const EdgeInsets.only(bottom: 96),
+      padding: _listPadding,
       itemCount: albums.length,
-      itemBuilder: (context, index) {
-        final album = albums[index];
-        return Dismissible(
-          key: UniqueKey(),
-          background: _dismissibleBackground(
-            context,
-            Alignment.centerLeft,
-          ),
-          secondaryBackground: _dismissibleBackground(
-            context,
-            Alignment.centerRight,
-          ),
-          onDismissed: (_) =>
-              context.read<AlbumsCubit>().deleteAlbumRequested(index),
-          child: ListTile(
-            contentPadding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
-            title: Text(album.title ?? 'Untitled'),
-            trailing: (album.id != null) ? Text('${album.id}') : null,
-            onTap: () {
-              if (album.id != null) {
-                context.router.push(AlbumPhotosRoute(id: album.id!));
-              }
-            },
-          ),
-        );
-      },
+      itemBuilder: itemBuilder,
+    );
+  }
+
+  Widget? itemBuilder(BuildContext context, int index) {
+    final album = albums[index];
+
+    final trailing = (album.id != null) ? Text('${album.id}') : null;
+    final title = Text(album.title ?? Constants.untitled);
+
+    void onTap() => album.id != null
+        ? context.router.push(AlbumPhotosRoute(id: album.id!))
+        : null;
+
+    return Dismissible(
+      key: UniqueKey(),
+      background: _dismissibleBackground(
+        context,
+        Alignment.centerLeft,
+      ),
+      secondaryBackground: _dismissibleBackground(
+        context,
+        Alignment.centerRight,
+      ),
+      onDismissed: (_) =>
+          context.read<AlbumsCubit>().deleteAlbumRequested(index),
+      child: ListTile(
+        contentPadding: _tilePadding,
+        title: title,
+        trailing: trailing,
+        onTap: onTap,
+      ),
     );
   }
 
@@ -143,13 +157,15 @@ class _AlbumsSuccess extends StatelessWidget {
     final theme = Theme.of(context);
     final backgroundColor = theme.colorScheme.error;
     final iconColor = theme.colorScheme.onError;
+
+    const iconPadding = EdgeInsets.symmetric(horizontal: 16);
+
+    final deleteIcon = Icon(Icons.delete, color: iconColor);
+
     return Container(
       alignment: alignment,
       color: backgroundColor,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Icon(Icons.delete, color: iconColor),
-      ),
+      child: Padding(padding: iconPadding, child: deleteIcon),
     );
   }
 }

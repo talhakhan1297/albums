@@ -42,14 +42,14 @@ class OnboardingState extends Equatable {
 
   String? get usernameError {
     if (username.displayError == UsernameValidationError.invalid) {
-      return 'Please enter a valid username.';
+      return Constants.invalidUsernameError;
     }
     return null;
   }
 
   String? get passwordError {
     if (password.displayError == PasswordValidationError.invalid) {
-      return 'Please enter a valid password.';
+      return Constants.invalidPassswordError;
     }
     return null;
   }

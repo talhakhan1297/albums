@@ -1,4 +1,5 @@
 import 'package:album_repository/album_repository.dart';
+import 'package:albums/utils/constants/constants.dart';
 import 'package:albums/utils/helpers/api_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -96,7 +97,7 @@ class AlbumsCubit extends Cubit<AlbumsState> {
       if (id != null) {
         await _albumRepository.deleteAlbum(id);
       } else {
-        throw Exception('Something went wrong!');
+        throw Exception(Constants.generalError);
       }
 
       emit(
