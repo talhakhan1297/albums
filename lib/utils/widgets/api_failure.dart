@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class APIFailure extends StatelessWidget {
-  const APIFailure(this.errorMessage, {required this.onTryAgain, super.key});
+class FailureWidget extends StatelessWidget {
+  const FailureWidget(this.errorMessage, {required this.onTryAgain, super.key});
 
   final String? errorMessage;
   final void Function()? onTryAgain;

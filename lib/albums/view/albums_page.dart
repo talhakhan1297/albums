@@ -46,13 +46,19 @@ class AlbumsPage extends StatelessWidget {
         builder: (context, state) {
           switch (state.getAlbumsApiState.state) {
             case APICallState.loading:
-              return const APILoading();
+              return const LoadingWidget();
             case APICallState.loaded:
+              if (state.albums.isEmpty) {
+                return FailureWidget(
+                  Constants.emptyAlbumsMessage,
+                  onTryAgain: () => getAlbums(context),
+                );
+              }
               return _AlbumsSuccess(state.albums);
             case APICallState.failure:
-              return APIFailure(
+              return FailureWidget(
                 state.getAlbumsApiState.error,
-                onTryAgain: context.read<AlbumsCubit>().albumsRequested,
+                onTryAgain: () => getAlbums(context),
               );
             case APICallState.initial:
               return const SizedBox();
@@ -61,6 +67,9 @@ class AlbumsPage extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> getAlbums(BuildContext context) =>
+      context.read<AlbumsCubit>().albumsRequested();
 }
 
 class AddAlbumButton extends StatelessWidget {

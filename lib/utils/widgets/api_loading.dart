@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class APILoading extends StatelessWidget {
-  const APILoading({super.key});
+class LoadingWidget extends StatelessWidget {
+  const LoadingWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
