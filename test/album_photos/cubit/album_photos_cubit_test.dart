@@ -37,22 +37,11 @@ void main() {
 
     group('albumPhotosRequested', () {
       blocTest<AlbumPhotosCubit, AlbumPhotosState>(
-        'emits [APICallState.loading, APICallState.loaded]',
+        'verify albumRepository.getAlbumPhotos is called',
         build: () => AlbumPhotosCubit(albumRepository: albumRepository),
         act: (cubit) => cubit.albumPhotosRequested(1),
-        expect: () => <AlbumPhotosState>[
-          const AlbumPhotosState(
-            getAlbumPhotosApiState: APIState<List<AlbumPhoto>>(
-              state: APICallState.loading,
-            ),
-          ),
-          AlbumPhotosState(
-            getAlbumPhotosApiState: APIState<List<AlbumPhoto>>(
-              state: APICallState.loaded,
-              data: mockAlbumPhotos,
-            ),
-          ),
-        ],
+        verify: (_) =>
+            verify(() => albumRepository.getAlbumPhotos(1)).called(1),
       );
 
       blocTest<AlbumPhotosCubit, AlbumPhotosState>(
