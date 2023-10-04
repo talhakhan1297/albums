@@ -68,15 +68,6 @@ class _AlbumPhotosSuccess extends StatelessWidget {
   ) =>
       _placeHolderIcon;
 
-  Widget loadingBuilder(
-    BuildContext context,
-    Widget child,
-    ImageChunkEvent? loadingProgress,
-  ) {
-    if (loadingProgress == null) return child;
-    return _placeHolderIcon;
-  }
-
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
@@ -97,7 +88,6 @@ class _AlbumPhotosSuccess extends StatelessWidget {
                     width: double.infinity,
                     fit: BoxFit.cover,
                     errorBuilder: errorBuilder,
-                    loadingBuilder: loadingBuilder,
                   ),
                 ),
               ),
